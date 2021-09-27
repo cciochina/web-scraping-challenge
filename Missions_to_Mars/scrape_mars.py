@@ -37,11 +37,11 @@ def nasa_mars_news():
 
     html = browser.html
     soup = BeautifulSoup(html, "html.parser")
+     # take all the news and save them, at the end will return the latest one
+    results = soup.find_all("div",class_="list_text")
     
-    try:
-        # take all the news and save them, at the end will return the latest one
-        results = soup.find_all("div",class_="list_text")
-        for r in results:
+    for r in results:
+        try:
             title = r.find("div", class_="content_title").text
             description = r.find("div", class_="article_teaser_body").text
             latest_news = {
@@ -49,8 +49,9 @@ def nasa_mars_news():
                 "description": description
             }
             results_list.append(latest_news)
-    except AttributeError as error:
-        print(error)
+        except AttributeError as error:
+            print(error)
+        browser.links.find_by_partial_text("Next") 
     # I will try to return the latest news which is the first in my list
     browser.quit()
     return results_list[0]
@@ -180,9 +181,17 @@ def mars_hemi():
         hemisphere_image_urls.append(item_dict)
     return hemisphere_image_urls
 
+# this function will execute all the code above in place the results into a dictionary
+def scrape():
+    mars_collections = {
+        "news": nasa_mars_news(),
+        "image": mars_featured_image(),
+        "facts": mars_facts(),
+        "hemisphere": mars_hemi()
+    }
+    return mars_collections
 
-# In[ ]:
 
-
-
-
+if __name__ in "__main__":
+    results = scrape()
+    print(results)
