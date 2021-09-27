@@ -9,6 +9,8 @@ from splinter import Browser
 from bs4 import BeautifulSoup
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
+import time 
+
 
 
 # In[2]:
@@ -39,7 +41,7 @@ def nasa_mars_news():
     soup = BeautifulSoup(html, "html.parser")
      # take all the news and save them, at the end will return the latest one
     results = soup.find_all("div",class_="list_text")
-    
+    time.sleep(2)
     for r in results:
         try:
             title = r.find("div", class_="content_title").text
